@@ -5,7 +5,7 @@
 Simple program that analyzes users from their _every-day photos_ and detect them in real-time on the camera feed. Additional gender analysis is performed, too. Just for fun; based on [OpenCV](https://opencv.org).
 
 + DISCLAIMER #1: all photos used in this project are considered to be free.
-+ DISCLAIMER #2: Dear Emma Stone and Ryan Gosling, sorry for mixing my dumb face with yours.  
++ DISCLAIMER #2: Dear Emma Stone and Ryan Gosling, sorry for mixing my dumb face with yours.
 
 ## Build OpenCV
 
@@ -21,11 +21,11 @@ Photos used for genders training comes from AT&T dataset.
 
 Run with `/.gradlew run`. JavaFX dialog opens. Wait for training data to load. Start camera. Smile.
 
-## Example
+## Example :woman: :musical_score: :man:
 
 ![](lala.gif)
 
-_It's just me in the La La land_
+_It's just me in the La La land. Yeah._
 
 
 ## ToDo
