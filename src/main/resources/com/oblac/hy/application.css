@@ -1,0 +1,6 @@
+.pane {
+    -fx-background-color: #333;
+}
+.txt {
+    -fx-text-fill: ladder(#333, white 49%, black 50%);
+}
