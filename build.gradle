@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+dependencies {
+    compile fileTree('lib')
+}
+
+mainClassName = 'com.oblac.hy.Video'
+run {
+    systemProperty "java.library.path", 'lib'
+}
+
+task train(type: JavaExec) {
+    main = "com.oblac.hy.train.TrainAll"
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties = [
+            "java.library.path" : 'lib'
+    ]
+}
+
+// --- wrapper ----------------------------------------------------------------
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2'
+}
