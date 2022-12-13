@@ -18,7 +18,7 @@ public class PrepareFaces {
 
 	public void detectAllFacesFromRawPhotos() {
 		faceDetector = new FaceDetector();
-		List<User> users = User.allUsers();
+		final List<User> users = User.allUsers();
 
 		users.forEach(user -> {
 			System.out.println("user: " + user.name());
@@ -27,12 +27,12 @@ public class PrepareFaces {
 
 				System.out.print("\t" + rawPhotoFile.getName());
 
-				Mat rawFaceImage = Imgcodecs.imread(rawPhotoFile.getAbsolutePath(), Imgcodecs.CV_LOAD_IMAGE_COLOR);
+				final Mat rawFaceImage = Imgcodecs.imread(rawPhotoFile.getAbsolutePath(), Imgcodecs.IMREAD_COLOR);
 
 				extractFace(rawFaceImage, detectedFace -> {
 					System.out.print("\t -> face detected");
 
-					String destinationImageFile = user.newFaceFile(rawPhotoFile.getName()).getAbsolutePath();
+					final String destinationImageFile = user.newFaceFile(rawPhotoFile.getName()).getAbsolutePath();
 
 					Imgcodecs.imwrite(destinationImageFile, detectedFace);
 				});
@@ -42,13 +42,13 @@ public class PrepareFaces {
 		});
 	}
 
-	private void extractFace(Mat faceImage, Consumer<Mat> detectedFaceConsumer) {
-		List<Rect> faces = faceDetector.detectFace(faceImage);
+	private void extractFace(final Mat faceImage, final Consumer<Mat> detectedFaceConsumer) {
+		final List<Rect> faces = faceDetector.detectFace(faceImage);
 
 		if (faces.size() == 1) {
-			Rect faceRect = faces.get(0);
+			final Rect faceRect = faces.get(0);
 
-			Rect cropFace = new Rect(faceRect.x, faceRect.y, faceRect.width, faceRect.height);
+			final Rect cropFace = new Rect(faceRect.x, faceRect.y, faceRect.width, faceRect.height);
 
 			detectedFaceConsumer.accept(new Mat(faceImage, cropFace));
 		}

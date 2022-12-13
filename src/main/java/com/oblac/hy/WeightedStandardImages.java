@@ -11,20 +11,20 @@ import java.io.IOException;
  * Set of weighted images.
  */
 public class WeightedStandardImages {
-	private int types;
-	private Size size;
-	private int[] ids;
-	private int[] weights;
-	private Mat[] standardImages;
+	private final int types;
+	private final Size size;
+	private final int[] ids;
+	private final int[] weights;
+	private final Mat[] standardImages;
 
-	public WeightedStandardImages(int types, Size size) {
+	public WeightedStandardImages(final int types, final Size size) {
 		this.types = types;
 		this.size = size;
 		this.ids = new int[types];
 		this.weights = new int[types];
 		this.standardImages = new Mat[types];
 		for (int i = 0; i < types; i++) {
-			standardImages[i] = new Mat(size, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+			standardImages[i] = new Mat(size, Imgcodecs.IMREAD_GRAYSCALE);
 		}
 	}
 
@@ -35,12 +35,12 @@ public class WeightedStandardImages {
 	/**
 	 * Saves {@link #generateTrainingData() training data} to a file.
 	 */
-	public void saveTrainedData(String filePath) {
+	public void saveTrainedData(final String filePath) {
 		try {
-			FileWriter fileWriter = new FileWriter(filePath);
+			final FileWriter fileWriter = new FileWriter(filePath);
 			fileWriter.write(generateTrainingData());
 			fileWriter.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -49,31 +49,32 @@ public class WeightedStandardImages {
 	 * Generates training data.
 	 */
 	public String generateTrainingData() {
-		int rows = (int) size.height, cols = (int) size.width;
+		final int rows = (int) size.height;
+		final int cols = (int) size.width;
 
-		String content =
-			"types:" + types + "\n" +
-				"size:" + rows + "," + cols + "\n" +
-				"data\n";
+		final StringBuilder content =
+				new StringBuilder("types:" + types + "\n" +
+						"size:" + rows + "," + cols + "\n" +
+						"data\n");
 
 		for (int i = 0; i < types; i++) {
-			StringBuilder imageType = new StringBuilder()
+			final StringBuilder imageType = new StringBuilder()
 				.append("id:").append(ids[i]).append("\n")
 				.append("weight:").append(weights[i]).append("\n")
 				.append("image\n");
 
 			for (int row = 0; row < rows; row++) {
-				StringBuilder line = new StringBuilder();
+				final StringBuilder line = new StringBuilder();
 				for (int col = 0; col < cols; col++) {
 					line.append((int) standardImages[i].get(row, col)[0]).append(",");
 				}
 				imageType.append(line).append("\n");
 			}
 
-			content = content + imageType + "\n";
+			content.append(imageType).append("\n");
 		}
 
-		return content;
+		return content.toString();
 	}
 
 	/**
@@ -87,42 +88,42 @@ public class WeightedStandardImages {
 		return size;
 	}
 
-	public int getId(int index) {
+	public int getId(final int index) {
 		return ids[index];
 	}
 
-	public void setId(int index, int id) {
+	public void setId(final int index, final int id) {
 		ids[index] = id;
 	}
 
-	public int getWeight(int index) {
+	public int getWeight(final int index) {
 		return weights[index];
 	}
 
-	public void setWeight(int index, int weight) {
+	public void setWeight(final int index, final int weight) {
 		weights[index] = weight;
 	}
 
-	public void incrementWeight(int index) {
+	public void incrementWeight(final int index) {
 		weights[index]++;
 	}
 
-	public void setStandardImage(int index, int row, int col, int pixel) {
+	public void setStandardImage(final int index, final int row, final int col, final int pixel) {
 		standardImages[index].put(row, col, pixel);
 	}
 
-	public void setStandardImage(Mat newMat, int index) {
+	public void setStandardImage(final Mat newMat, final int index) {
 		standardImages[index] = newMat;
 	}
 
-	public int getStandardImage(int index, int row, int col) {
+	public int getStandardImage(final int index, final int row, final int col) {
 		if (index < types && row < size.width && col < size.height) {
 			return (int) standardImages[index].get(row, col)[0];
 		}
 		return 0;
 	}
 
-	public Mat getStandardImage(int index) {
+	public Mat getStandardImage(final int index) {
 		return standardImages[index];
 	}
 }

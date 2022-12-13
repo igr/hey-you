@@ -3,3 +3,6 @@ build
 .gradle
 out
 *.iml
+opencv-4.6.0
+opencv_contrib-4.6.0
+opencv*.tar.gz

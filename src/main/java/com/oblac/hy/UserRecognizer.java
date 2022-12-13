@@ -29,7 +29,7 @@ public class UserRecognizer {
 	}
 
 	public void train() {
-		List<User> users = User.allUsers();
+		final List<User> users = User.allUsers();
 
 		System.out.println("Training face recognizer...");
 
@@ -37,8 +37,8 @@ public class UserRecognizer {
 		weightedStandardPixelTrainer.loadTrainedData("data/gender.txt");
 
 
-		List<Mat> faces = new ArrayList<>();
-		List<Integer> labels = new ArrayList<>();
+		final List<Mat> faces = new ArrayList<>();
+		final List<Integer> labels = new ArrayList<>();
 
 		users.forEach(user -> {
 			System.out.println("\t" + user.name() + " " + user.id());
@@ -48,7 +48,7 @@ public class UserRecognizer {
 				.stream()
 				.peek(file -> System.out.println(file.getName()))
 				.map(faceUserFile ->
-					Imgcodecs.imread(faceUserFile.getAbsolutePath(), Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE))
+					Imgcodecs.imread(faceUserFile.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE))
 				.peek(face ->
 					Imgproc.resize(face, face, TRAIN_FACE_IMAGE_SIZE)
 				)
@@ -58,7 +58,7 @@ public class UserRecognizer {
 				});
 		});
 
-		MatOfInt allLabels = new MatOfInt(new int[labels.size()]);
+		final MatOfInt allLabels = new MatOfInt(new int[labels.size()]);
 		for (int i = 0; i < labels.size(); i++) {
 			allLabels.put(i, 0, labels.get(i));
 		}
@@ -70,16 +70,16 @@ public class UserRecognizer {
 	/**
 	 * Recognizes user based on his detected face. Also performs gender detection.
 	 */
-	public RecognizedUser matchFace(Mat face) {
+	public RecognizedUser matchFace(final Mat face) {
 		Imgproc.cvtColor(face, face, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.resize(face, face, TRAIN_FACE_IMAGE_SIZE);
 
-		int[] label = {0};
-		double[] confidence = {0};
+		final int[] label = {0};
+		final double[] confidence = {0};
 
 		faceRecognizer.predict(face, label, confidence);
 
-		int gender = weightedStandardPixelTrainer.predict(face);
+		final int gender = weightedStandardPixelTrainer.predict(face);
 
 		if (confidence[0] < 100) {
 			return new RecognizedUser(label[0], confidence[0], gender);

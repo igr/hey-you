@@ -47,7 +47,7 @@ public class WeightedStandardPixelTrainer {
 
 		int typeNo = 0, index = 0;
 		for (String imageFilePath : imageFilePaths) {
-			Mat mat = Imgcodecs.imread(imageFilePath, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+			Mat mat = Imgcodecs.imread(imageFilePath, Imgcodecs.IMREAD_GRAYSCALE);
 			Imgproc.resize(mat, mat, imageSize);
 			mat = toMedialMat(mat);
 

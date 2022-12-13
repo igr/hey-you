@@ -76,12 +76,12 @@ public class VideoController {
 				this.cameraActive = true;
 
 				// grab a frame every 33 ms (30 frames/sec)
-				Runnable frameGrabber = () -> {
+				final Runnable frameGrabber = () -> {
 					// effectively grab and process a single frame
-					Mat frame = grabFrame();
+					final Mat frame = grabFrame();
 
 					// convert and show the frame
-					Image imageToShow = Utils.mat2Image(frame);
+					final Image imageToShow = Utils.mat2Image(frame);
 					updateImageView(currentFrame, imageToShow);
 				};
 
@@ -105,7 +105,7 @@ public class VideoController {
 	 * Get a frame from the opened video stream (if any).
 	 */
 	private Mat grabFrame() {
-		Mat frame = new Mat();
+		final Mat frame = new Mat();
 
 		if (this.capture.isOpened()) {
 			try {
@@ -116,8 +116,8 @@ public class VideoController {
 					this.detectAndDisplay(frame);
 
 					// add a logo...
-					Rect roi = new Rect(frame.cols() - logo.cols(), frame.rows() - logo.rows(), logo.cols(), logo.rows());
-					Mat imageROI = frame.submat(roi);
+					final Rect roi = new Rect(frame.cols() - logo.cols(), frame.rows() - logo.rows(), logo.cols(), logo.rows());
+					final Mat imageROI = frame.submat(roi);
 					Core.addWeighted(imageROI, 1.0, logo, 0.8, 0.0, imageROI);
 
 					// to grayscale
@@ -126,10 +126,10 @@ public class VideoController {
 					}
 
 					// show the histogram
-					Image histImg = histogram.makeHistogram(frame, grayscale.isSelected());
+					final Image histImg = histogram.makeHistogram(frame, grayscale.isSelected());
 					updateImageView(histogramImageView, histImg);
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				System.err.println("Frame elaboration error: " + e);
 				e.printStackTrace();
 			}
@@ -146,7 +146,7 @@ public class VideoController {
 			try {
 				this.timer.shutdown();
 				this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				System.err.println("Exception in stopping the frame capture " + e);
 			}
 		}
@@ -159,7 +159,7 @@ public class VideoController {
 	/**
 	 * Update the {@link ImageView} in the JavaFX main thread.
 	 */
-	private void updateImageView(ImageView view, Image image) {
+	private void updateImageView(final ImageView view, final Image image) {
 		Utils.onFXThread(view.imageProperty(), image);
 	}
 
@@ -171,15 +171,15 @@ public class VideoController {
 	}
 
 
-	private void detectAndDisplay(Mat frame) {
-		List<Rect> faces = faceDetector.detectFace(frame);
+	private void detectAndDisplay(final Mat frame) {
+		final List<Rect> faces = faceDetector.detectFace(frame);
 
 		faces.forEach(face -> {
-			Rect cropFace = new Rect(face.x, face.y, face.width, face.height);
+			final Rect cropFace = new Rect(face.x, face.y, face.width, face.height);
 
-			Mat cropedFace = new Mat(frame, cropFace);
+			final Mat cropedFace = new Mat(frame, cropFace);
 
-			RecognizedUser recognizedUser = userRecognizer.matchFace(cropedFace);
+			final RecognizedUser recognizedUser = userRecognizer.matchFace(cropedFace);
 
 			User.findUserById(recognizedUser.getLabel(), user -> {
 				Imgproc.rectangle(frame, face.tl(), face.br(), COLOR_SUCCESS, 2);
@@ -197,7 +197,7 @@ public class VideoController {
 
 				Imgproc.putText(frame, text,
 					new Point(face.x + 10, face.y + face.height + 24),
-					Core.FONT_HERSHEY_PLAIN, 2,
+						Imgproc.FONT_HERSHEY_PLAIN, 2,
 					COLOR_TEXT, 2);
 			}, () ->
 				Imgproc.rectangle(frame, face.tl(), face.br(), COLOR_UNRECOGNIZED, 4)
@@ -207,7 +207,7 @@ public class VideoController {
 		});
 	}
 
-	private Scalar COLOR_TEXT = new Scalar(255, 255, 255);
-	private Scalar COLOR_SUCCESS = new Scalar(0, 200, 0);
-	private Scalar COLOR_UNRECOGNIZED = new Scalar(0, 0, 255);
+	private final Scalar COLOR_TEXT = new Scalar(255, 255, 255);
+	private final Scalar COLOR_SUCCESS = new Scalar(0, 200, 0);
+	private final Scalar COLOR_UNRECOGNIZED = new Scalar(0, 0, 255);
 }

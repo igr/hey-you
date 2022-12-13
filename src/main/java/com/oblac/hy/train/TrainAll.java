@@ -4,7 +4,7 @@ import org.opencv.core.Core;
 
 public class TrainAll {
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		System.out.println("---> EXTRACT FACES");
